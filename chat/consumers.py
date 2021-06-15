@@ -85,7 +85,6 @@ class ChatConsumer(WebsocketConsumer):
    # czynności wykonywane podczas otrzymania wiadomości z WebSocketu
     def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
         self.commands[data['command']](self,data)  #przypisanie nazwy komendy do nazwy fukcji (porownanie)
 
     #funcka rozpoczynająca wysłanie wiadomości do całej grupy, nadaje typ i wywołuje odpowiednią funkcje

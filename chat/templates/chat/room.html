@@ -17,7 +17,7 @@
         <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
 	</head>
 
-	<body>
+	<body onload="urlCheckFunc()">
 				<div class="col-md-8 col-xl-6 chat">
 					<div class="card">
 						<div class="card-header msg_head">
@@ -36,7 +36,7 @@
 
 						<div class="card-footer">
 							<div class="input-group">
-								<input id="chat-message-input" name="" class="form-control type_msg" placeholder="Type your message...">
+								<input id="chat-message-input" name="" class="form-control type_msg"  maxlength="75" placeholder="Type your message...">
 								<div class="input-group-append">
                                     <input id ="chat-message-submit", type="button", class="input-group-text send_btn">
 								</div>
@@ -44,14 +44,13 @@
 						</div>
 					</div>
 				</div>
-                <input id ="chat-delete", type="button", style='width:180px ;margin-top:20px' value="Delete all messages!" class="input-group-text send_btn">
+                <input id ="chat-delete", type="button", style='width:180px ;margin-top:20px' value="Delete all messages" class="input-group-text send_btn">
                 <input id ="chat-back", type="button", style='width:75px ;margin-top:10px' value="Back" class="input-group-text send_btn">
 			</div>
 		</div>
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -165,6 +164,24 @@
             window.location.href = '../';
         };
 
+        function urlCheckFunc() {
+            var splittedUrl = window.location.href.split('/');
+            if (splittedUrl[4].length > 16) window.location.href = '../';
+            for (i=0; i < splittedUrl[4].length; i++) {
+                correct = checkPunc(splittedUrl[4][i].charCodeAt(0));
+                if(correct==true) break;
+                }
+                if (correct == true) window.location.href = '../';
+
+        };
+
+         function checkPunc(num) {
+            if ((num >=33) && (num <=47)) { return true; }
+            if ((num >=58) && (num <=64)) { return true; }
+            if ((num >=91) && (num <=96)) { return true; }
+            if ((num >=123) && (num <=126)) { return true; }
+            return false;
+        };
 //ALETRIFY//
 (function (global, undefined) {
 	"use strict";

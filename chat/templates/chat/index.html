@@ -16,7 +16,7 @@
     </div>
 
     <!-- Login Form -->
-      <input  id="room-name-input" type="text" class="fadeIn second" placeholder="Enter room name...">
+      <input  id="room-name-input" type="text" class="fadeIn second" maxlength="16" placeholder="Enter room name...">
       <input id="room-name-generate" type="button" class="fadeIn fourth" value="Generate">
       <input id="room-name-submit" type="submit" class="fadeIn fourth" value="Confirm">
 
@@ -24,7 +24,7 @@
 </div>
     <script>
         function getRandomNum() {
-            var rndNum = Math.random();
+            let rndNum = Math.random();
             rndNum = parseInt(rndNum * 1000);
             rndNum = (rndNum % 94) + 33;
             return rndNum;
@@ -62,7 +62,6 @@
             else{
                 alert("Enter room name!");
             }
-
         };
         document.querySelector('#room-name-generate').onclick = function (e){
             let sPassword = "";
