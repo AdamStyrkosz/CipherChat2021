@@ -17,3 +17,6 @@ class Message(models.Model):
 
     def last_10_messages(self,room):
         return Message.objects.all().filter(author=room).order_by('timestamp')
+
+    def delete_messages(self,room):
+        return Message.objects.all().filter(author=room).delete()

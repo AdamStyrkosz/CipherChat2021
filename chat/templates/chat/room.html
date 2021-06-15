@@ -44,6 +44,8 @@
 						</div>
 					</div>
 				</div>
+                <input id ="chat-delete", type="button", style='width:180px ;margin-top:20px' value="Delete all messages!" class="input-group-text send_btn">
+                <input id ="chat-back", type="button", style='width:75px ;margin-top:10px' value="Back" class="input-group-text send_btn">
 			</div>
 		</div>
     {{ room_name|json_script:"room-name" }}
@@ -95,6 +97,7 @@
         chatSocket.onmessage = function(e){
             let data = JSON.parse(e.data)
             console.log(data);
+
             if(data['command'] == 'messages'){
                 for (let i = 0; i < data['messages'].length; i++){
                     renderMessage(data['messages'][i]);
@@ -112,6 +115,9 @@
                     alertify.set({ delay: 1700 });
                     alertify.error("User disconnected :(");
                 }
+            }
+            else if (data['command']=='delete-messages'){
+                window.location.reload()
             }
         };
 
@@ -144,6 +150,19 @@
                 'room': '{{room_name}}'
             }));
             messageInputDom.value = '';}
+        };
+        document.querySelector('#chat-delete').onclick = function(e) {
+
+            if (confirm("Do you want to delete all messages?") == true) {
+                chatSocket.send(JSON.stringify({
+                    'command': 'delete-messages',
+                    'room': '{{room_name}}'
+                }));
+            }
+        };
+
+        document.querySelector('#chat-back').onclick = function (e){
+            window.location.href = '../';
         };
 
 //ALETRIFY//

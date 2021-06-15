@@ -1,11 +1,7 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
-
-import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from .models import Message
-
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -17,7 +13,6 @@ class ChatConsumer(WebsocketConsumer):
             'command': 'messages',
             'messages': self.messages_to_json(messages)
         }
-        print(content)
         self.send_message(content)
 
     #funcja odczytująca wiadomość od klienta, zapisuje ją do bazy danych w formie zaszyfrowanej, następnie wysyła do WSZYSTKICH UŻYTKOWNIKÓW
@@ -28,9 +23,14 @@ class ChatConsumer(WebsocketConsumer):
             'command': 'new_message',
             'message': self.message_to_json(message)
         }
-        print(content)
         return self.send_chat_message(content)
-
+    def delete_messages(self,data):
+        room = data['room']
+        Message.delete_messages(self,room)
+        content = {
+            'command': 'delete-messages'
+        }
+        return self.send_chat_message(content)
     #tworzenie tablicy wiadomości w formacie json
     def messages_to_json(self,messages):
         result = []
@@ -49,6 +49,7 @@ class ChatConsumer(WebsocketConsumer):
     commands = {
         'fetch_messages': fetch_messages,
         'new_message': new_message,
+        'delete-messages': delete_messages,
     }
 
     #czynności wykonywane przy podłączeniu nowego użytkownika
